@@ -60,7 +60,7 @@ let npmTool =
 
 let vsceTool =
     pickTool
-        ("vsce")
+        ("./release/node_modules/.bin/vsce")
         ("packages" </> "Node.js" </> "vsce.cmd" |> FullName)
 
 
@@ -97,11 +97,6 @@ Target "CopyGrammar" (fun _ ->
     ]
  )
 
-Target "InstallVSCE" ( fun _ ->
-    killProcess "npm"
-    run npmTool "install -g vsce" ""
-)
-
 Target "SetVersion" (fun _ ->
     let fileName = "./release/package.json"
     let lines =
@@ -123,6 +118,7 @@ Target "BuildPackage" ( fun _ ->
 
 Target "TryPackage"(fun _ ->
     killProcess "code"
+    run codeTool "--uninstall-extension Ionide-Paket" ""
     run codeTool (sprintf "./temp/Ionide-fsharp-%s.vsix" release.NugetVersion) ""
 )
 
@@ -185,7 +181,6 @@ Target "Release" DoNothing
 
 "Default"
   ==> "SetVersion"
-  ==> "InstallVSCE"
   ==> "BuildPackage"
   ==> "ReleaseGitHub"
   ==> "PublishToGallery"

@@ -124,7 +124,8 @@
 	},
 	"devDependencies": {
 		"vscode": "*",
-		"fable-compiler": "*"
+		"fable-compiler": "*",
+		"vsce": "*"
 	},
 	"dependencies": {
 		"path": "*",
