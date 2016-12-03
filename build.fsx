@@ -55,20 +55,20 @@ let pickTool unixPath winPath =
 
 let npmTool =
     pickTool
-        "/usr/local/bin/npm"
-        __SOURCE_DIRECTORY__ </> "packages/Npm.js/tools/npm.cmd"
+        ("npm")
+        (__SOURCE_DIRECTORY__ </> "packages/Npm.js/tools/npm.cmd")
 
 let vsceTool =
     pickTool
-        "vsce"
-        "packages" </> "Node.js" </> "vsce.cmd" |> FullName
+        ("vsce")
+        ("packages" </> "Node.js" </> "vsce.cmd" |> FullName)
 
 
 
 let codeTool =
     pickTool
-        "code"
-        ProgramFilesX86  </> "Microsoft VS Code" </> "bin/code.cmd"
+        ("code")
+        (ProgramFilesX86  </> "Microsoft VS Code" </> "bin/code.cmd")
 
 
 // --------------------------------------------------------------------------------------
