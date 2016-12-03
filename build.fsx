@@ -117,9 +117,11 @@ Target "BuildPackage" ( fun _ ->
 )
 
 Target "TryPackage"(fun _ ->
+    let packageName = "Ionide-Paket"
     killProcess "code"
-    run codeTool "--uninstall-extension Ionide-Paket" ""
-    run codeTool (sprintf "./temp/Ionide-fsharp-%s.vsix" release.NugetVersion) ""
+    run codeTool (sprintf "--uninstall-extension %s" packageName) ""
+    run codeTool (sprintf "--install-extension ./temp/%s-%s.vsix" packageName release.NugetVersion) ""
+    run codeTool "" ""
 )
 
 Target "PublishToGallery" ( fun _ ->
