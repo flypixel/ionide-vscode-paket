@@ -30,7 +30,6 @@ let pluginBootstrapper = pluginPath </> "bin" </> "paket.bootstrapper.exe"
 
 let pluginPaket = pluginPath </> "bin" </> "paket.exe"
 
-let outputChannel = vscode.window.createOutputChannel "Paket"
 
 let private location, private bootstrapperLocation, private localTools =
     if fs.existsSync localPaketDir then
@@ -39,10 +38,14 @@ let private location, private bootstrapperLocation, private localTools =
         pluginPaket, pluginBootstrapper, false
 
 let private spawnPaket cmd =
-
+    let outputChannel = vscode.window.createOutputChannel "Paket"
     outputChannel.clear ()
     outputChannel.append (location+"\n")
     let startedMessage = vscode.window.setStatusBarMessage "Paket started"
+    vscode.window.showInformationMessage ("Paket started", "Open")
+    |> Helpers.Promise.onSuccess(fun n ->
+        if n = "Open" then outputChannel.show (2 |> unbox) )
+    |> ignore
 
     Helpers.Process.spawnWithNotification location "mono" cmd outputChannel
     |> Helpers.Process.onExit(fun (code) ->
@@ -167,7 +170,7 @@ let UpdatePaketToAlpha () =
 
 let activate(context: vscode.ExtensionContext) =
     let registerCommand com (f: unit->unit) =
-        vscode.commands.registerCommand(com, unbox f)
+        vscode.commands.registerCommand(com, new Func<obj, obj>(unbox f))
         |> context.subscriptions.Add
 
     UpdatePaketSilent () |> ignore
