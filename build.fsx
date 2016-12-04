@@ -39,12 +39,12 @@ let releaseMsg = (sprintf "Release %s\n" release.NugetVersion) + msg
 
 
 let run cmd args dir =
-    if execProcess( fun info ->
+    let setProcInfo (info: ProcessStartInfo) =
         info.FileName <- cmd
         if not( String.IsNullOrWhiteSpace dir) then
             info.WorkingDirectory <- dir
         info.Arguments <- args
-    ) System.TimeSpan.MaxValue = false then
+    if execProcess setProcInfo System.TimeSpan.MaxValue |> not then
         traceError <| sprintf "Error while running '%s' with args: %s" cmd args
 
 
@@ -187,4 +187,4 @@ Target "Release" DoNothing
   ==> "ReleaseGitHub"
   ==> "PublishToGallery"
   ==> "Release"
-RunTargetOrDefault "Default"
+RunTargetOrDefault "TryPackage"
