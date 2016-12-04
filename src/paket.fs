@@ -170,7 +170,7 @@ let UpdatePaketToAlpha () =
 
 let activate(context: vscode.ExtensionContext) =
     let registerCommand com (f: unit->unit) =
-        vscode.commands.registerCommand(com, new Func<obj, obj>(unbox f))
+        vscode.commands.registerCommand(com, f |> unbox<Func<obj,obj>>)
         |> context.subscriptions.Add
 
     UpdatePaketSilent () |> ignore
